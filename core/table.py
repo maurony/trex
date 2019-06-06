@@ -95,3 +95,31 @@ def build_lines(table_cells):
     hor_lines.append((x, max_y, max_x, max_y))
 
     return hor_lines, ver_lines
+
+table_zone = (111, 1191, 1455, 1955)
+
+from core import ocr
+
+img = ocr.crop('./img/page_2.jpg', table_zone, './test3.jpg')
+
+img = cv2.imread('./test3.jpg')
+pp_img = pre_process_image(img, './test.jpg', (6, 6))
+boxes = find_text_boxes(pp_img, min_text_height_limit=8, max_text_height_limit=40)
+table_boxes = find_table_in_boxes(boxes, cell_threshold=30, min_columns=4)
+hor_lines, ver_lines = build_lines(table_boxes)
+
+vis = img.copy()
+
+# for box in text_boxes:
+#     (x, y, w, h) = box
+#     cv2.rectangle(vis, (x, y), (x + w - 2, y + h - 2), (0, 255, 0), 1)
+
+for line in hor_lines:
+    [x1, y1, x2, y2] = line
+    cv2.line(vis, (x1, y1), (x2, y2), (0, 0, 255), 1)
+
+#for line in ver_lines:
+#    [x1, y1, x2, y2] = line
+#    cv2.line(vis, (x1, y1), (x2, y2), (0, 0, 255), 1)
+
+cv2.imwrite('test4.jpg', vis)

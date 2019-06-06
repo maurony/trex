@@ -1,4 +1,4 @@
-from core import ocr,utils, preprocess, table
+from core import ocr, utils, preprocess, table
 from itertools import chain
 import cv2
 import os
